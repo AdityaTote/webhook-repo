@@ -1,0 +1,35 @@
+services:
+  github-webhook:
+    container_name: github-webhook
+    build:
+      context: .
+      dockerfile: DockerFile
+    ports:
+      - 5000:5000
+    env_file:
+      - .env
+    depends_on:
+      - mongo
+      - redis
+
+  mongo:
+    image: mongo
+    container_name: mongo_db
+    ports:
+      - 27107:27107
+    volumes:
+      - db_volume:/data/db
+
+  redis:
+    image: redis
+    container_name: redis_db
+    restart: always
+    ports:
+      - 6379:6379
+    volumes:
+      - cache:/data
+
+volumes:
+  db_volume:
+  cache:
+    driver: local
