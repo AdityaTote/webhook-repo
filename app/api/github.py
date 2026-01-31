@@ -5,9 +5,9 @@ from app.services.github import GithubService
 github = Blueprint("Github", __name__, url_prefix="/github")
 
 @github.route("/events", methods=["GET"])
-async def get_github_data():
+def get_github_data():
   since = request.args.get('since')
-  data = await GithubService.git_github_data(since) 
+  data = GithubService.git_github_data(since)
   return {
     "data": data
   }, 200

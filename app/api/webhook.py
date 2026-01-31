@@ -9,7 +9,7 @@ import json
 webhook = Blueprint('Webhook', __name__, url_prefix='/webhook')
 
 @webhook.route('/receiver', methods=["POST"])
-async def receiver():
+def receiver():
     # extract hash signature from header
     sign = request.headers.get("X-Hub-Signature-256")
     if not sign:
@@ -41,17 +41,17 @@ async def receiver():
             # parse the input data to push payload
             payload_data = WebhookPayload(**json_data)
             # store the data in database for push action
-            data = await WebhookService.store_data(payload_data, Action.push)
+            data =  WebhookService.store_data(payload_data, Action.push)
         elif Action(action.upper()) == Action.pull_request:
             # parse the input data to pull request payload
             payload_data = PullRequestWebhookPayload(**json_data)
             # check if its a merge or pull request action
             if not payload_data.pull_request.merged:
               # store the data in database for pull request action
-              data = await WebhookService.store_data(payload_data, Action.pull_request)
+              data =  WebhookService.store_data(payload_data, Action.pull_request)
             else:
               # store the data in database for merge action
-              data = await WebhookService.store_data(payload_data, Action.merge)
+              data =  WebhookService.store_data(payload_data, Action.merge)
     except Exception as e:
         print(f"Error processing webhook: {e}")
         return {"error": str(e)}, 400

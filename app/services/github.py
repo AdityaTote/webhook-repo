@@ -3,7 +3,7 @@ from app.database.database import db
 
 class GithubService():
   @staticmethod
-  async def git_github_data(since: str | None):
+  def git_github_data(since: str | None):
     data = []
     
     try:
